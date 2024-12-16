@@ -171,3 +171,43 @@ toggleButton.addEventListener('click', () => {
         console.error("点击toggleButton处理时发生错误：", error);
     }
 });
+
+document.getElementById('exportButton').addEventListener('click', async () => {
+    try {
+        const records = await getAllRecords();
+        if (records.length === 0) {
+            alert("没有数据可导出！");
+            return;
+        }
+
+        const markdown = generateMarkdown(records);
+        downloadMarkdown(markdown, '计时数据导出.md');
+    } catch (error) {
+        console.error("导出数据时发生错误：", error);
+    }
+});
+
+function generateMarkdown(records) {
+    try {
+        const header = "| 开始时间 | 结束时间 | 用时 | 计时目的 |\n|---|---|---|---|";
+        const rows = records.map(record => {
+            return `| ${new Date(record.startTime).toLocaleString()} | ${new Date(record.endTime).toLocaleString()} | ${formatTime(record.duration)} | ${record.purpose || "无"} |`;
+        });
+        return `${header}\n${rows.join('\n')}`;
+    } catch (error) {
+        console.error("生成Markdown时发生错误：", error, "记录：", records);
+        throw error;
+    }
+}
+
+function downloadMarkdown(content, filename) {
+    try {
+        const blob = new Blob([content], { type: 'text/markdown' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+    } catch (error) {
+        console.error("下载Markdown文件时发生错误：", error);
+    }
+}
