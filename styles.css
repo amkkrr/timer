@@ -145,3 +145,37 @@ body, html {
     display: block; /* 鼠标悬停显示 */
 }
 
+/* 移动设备的适应样式 */
+@media (max-width: 768px) {
+    body, html {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .button-container {
+        margin-bottom: 15px;
+    }
+
+    #toggleButton {
+        width: 80px;
+        height: 80px;
+        font-size: 14px;
+    }
+
+    #timerDisplay {
+        font-size: 20px;
+    }
+
+    #purposeInput {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #recordsContainer {
+        width: 100%;
+    }
+
+    #recordsHeader, .record {
+        grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    }
+}

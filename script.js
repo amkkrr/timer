@@ -9,13 +9,25 @@ let timerInterval = null;
 let startTime = null;
 let elapsedTime = 0;
 
-toggleButton.addEventListener('click', () => {
+// 添加多设备兼容的事件绑定
+function handleToggle() {
     if (!timerInterval) {
         startTimer();
     } else {
         stopTimer();
     }
-});
+}
+
+// 检测是否为触摸设备
+const isTouchDevice = 'ontouchstart' in window;
+
+// 根据设备类型绑定事件
+if (isTouchDevice) {
+    toggleButton.addEventListener('touchstart', handleToggle);
+} else {
+    toggleButton.addEventListener('click', handleToggle);
+}
+
 
 function startTimer() {
     startTime = Date.now() - elapsedTime;
