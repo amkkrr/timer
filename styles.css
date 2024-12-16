@@ -1,0 +1,147 @@
+/* styles.css */
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f0f0f0;
+}
+
+.button-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#toggleButton {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+#toggleButton.stop {
+    background-color: #f44336;
+}
+
+#timerDisplay {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+#purposeContainer {
+    margin-top: 20px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+#purposeInput {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+#submitPurpose {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#recordsContainer {
+    margin-top: 30px;
+    width: 90%;
+    max-width: 800px;
+    overflow-x: auto; /* 允许水平滚动 */
+}
+
+#recordsHeader, .record {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr; /* 根据需要调整比例 */
+    background-color: white;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    align-items: center;
+}
+
+#recordsHeader {
+    font-weight: bold;
+    background-color: #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* 去掉 `.record div` 原先对flex的要求 */
+.record div {
+    padding: 0 10px;
+    white-space: normal;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-align: left;
+}
+
+
+.record div {
+    flex: 1;
+    padding: 0 10px;
+    white-space: normal;  /* 允许内容换行 */
+    overflow: hidden;     /* 隐藏超出部分 */
+    word-wrap: break-word;  /* 强制长单词换行 */
+    min-width: 0;          /* 允许扩展宽度 */
+    max-width: 100%;       /* 限制最大宽度 */
+    text-align: left;      /* 对齐文本内容 */
+}
+
+#recordsContainer {
+    margin-top: 30px;
+    width: 90%;
+    max-width: 800px;
+    overflow-x: auto; /* 允许水平滚动 */
+    white-space: normal;  /* 允许内容换行 */
+}
+
+#recordsHeader div, .record div {
+    display: flex;        /* 设置为flex容器 */
+    align-items: center;  /* 确保内容垂直居中 */
+}
+
+
+/* 可选：为不同列设置固定宽度 */
+.record .startTime, .record .endTime {
+    flex: 2;
+}
+
+.record .duration, .record .purpose {
+    flex: 1;
+}
+
+/* 删除按钮样式 */
+.deleteButton {
+    display: none; /* 初始隐藏 */
+    padding: 5px 10px;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 滑动时显示删除按钮 */
+.record:hover .deleteButton {
+    display: block; /* 鼠标悬停显示 */
+}
+
