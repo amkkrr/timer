@@ -215,3 +215,35 @@ function downloadMarkdown(content, filename) {
         console.error("下载Markdown文件时发生错误：", error);
     }
 }
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('Service Worker 注册成功:', registration);
+      })
+      .catch(error => {
+        console.log('Service Worker 注册失败:', error);
+      });
+  });
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const installButton = document.getElementById('installButton');
+  installButton.style.display = 'block';
+
+  installButton.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      if (choice.outcome === 'accepted') {
+        console.log('用户接受安装');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
