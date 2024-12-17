@@ -1,7 +1,8 @@
 {
   "name": "计时器应用",
   "short_name": "计时器",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",

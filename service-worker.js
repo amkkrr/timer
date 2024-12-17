@@ -30,6 +30,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(keys.map(key => {
         if (!cacheWhitelist.includes(key)) {
+          console.log('删除旧缓存：', key);
           return caches.delete(key);
         }
       }))
