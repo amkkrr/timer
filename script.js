@@ -12,6 +12,8 @@ let timerInterval = null;
 let startTime = null;
 let elapsedTime = 0;
 
+let isTimerRunning = false; // 标志是否有计时进行中
+
 function handleToggle() {
     try {
         if (!timerInterval) {
@@ -64,6 +66,7 @@ function startTimer() {
         toggleButton.classList.add('stop');
         timerInterval = setInterval(updateTimer, 1000);
         purposeContainer.style.display = 'none';
+        isTimerRunning = true; // 标记计时开始
     } catch (error) {
         console.error("startTimer时发生错误：", error);
     }
@@ -78,6 +81,7 @@ function stopTimer() {
         toggleButton.classList.remove('stop');
         timerDisplay.textContent = formatTime(elapsedTime);
         purposeContainer.style.display = 'flex';
+        isTimerRunning = false; // 标记计时停止
     } catch (error) {
         console.error("stopTimer时发生错误：", error);
     }
@@ -246,4 +250,36 @@ window.addEventListener('beforeinstallprompt', (e) => {
       deferredPrompt = null;
     });
   });
+});
+
+// 监听窗口关闭/刷新
+window.addEventListener('beforeunload', (e) => {
+    try {
+        if (isTimerRunning) {
+            const confirmationMessage = '当前有计时正在进行，确定要离开吗？未提交的数据可能丢失。';
+            e.preventDefault();
+            e.returnValue = confirmationMessage; // 部分浏览器需要设置这个属性
+            return confirmationMessage;
+        }
+    } catch (error) {
+        console.error("beforeunload事件处理时发生错误：", error);
+    }
+});
+
+// 监听窗口卸载，保存意外终止的计时记录
+window.addEventListener('unload', async () => {
+    try {
+        if (isTimerRunning) {
+            const record = {
+                startTime: startTime,
+                endTime: Date.now(),
+                duration: Date.now() - startTime,
+                purpose: 'unexpected termination'
+            };
+            await addRecord(record);
+            console.log('计时已保存（意外终止）：', record);
+        }
+    } catch (error) {
+        console.error("unload事件处理时发生错误：", error);
+    }
 });
