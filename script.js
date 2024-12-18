@@ -184,12 +184,12 @@ document.getElementById('exportButton').addEventListener('click', async () => {
             return;
         }
 
-        const markdown = generateMarkdown(records);
+        const csv = generateCSV(records);
         const now = new Date();
         const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
                 + `-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-        const exported_filename = `计时数据导出-${timestamp}.md`;
-        downloadMarkdown(markdown, exported_filename);
+        const exported_filename = `计时数据导出-${timestamp}.csv`;
+        downloadCSV(csv, exported_filename);
     } catch (error) {
         console.error("导出数据时发生错误：", error);
     }
@@ -283,3 +283,32 @@ window.addEventListener('unload', async () => {
         console.error("unload事件处理时发生错误：", error);
     }
 });
+
+// 生成CSV格式的内容
+function generateCSV(records) {
+    try {
+        const header = "开始时间,结束时间,用时,计时目的";
+        const rows = records.map(record => {
+            return `"${new Date(record.startTime).toLocaleString()}","${new Date(record.endTime).toLocaleString()}","${formatTime(record.duration)}","${record.purpose || "无"}"`;
+        });
+        return `${header}\n${rows.join('\n')}`;
+    } catch (error) {
+        console.error("生成CSV时发生错误：", error, "记录：", records);
+        throw error;
+    }
+}
+
+// 下载CSV文件
+function downloadCSV(content, filename) {
+    try {
+        // 添加 UTF-8 BOM 前缀
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + content], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+    } catch (error) {
+        console.error("下载CSV文件时发生错误：", error);
+    }
+}
